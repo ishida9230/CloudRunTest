@@ -28,15 +28,20 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Google Cloud 認証のセットアップ
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       # Google Cloud SDK のセットアップ
       - name: Setup GCloud
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-        
-        # プロジェクトIDの設定
+          version: 'latest'
+
+      # プロジェクトIDの設定
       - name: Set GCP Project
         run: gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
 
